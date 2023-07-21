@@ -14,6 +14,9 @@ export const authOptions: NextAuthOptions = {
 	session: {
 		strategy: "jwt"
 	},
+	pages: {
+		// signIn: '/sign-in',
+	},
 	providers: [
 		CredentialsProvider({
 			// The name to display on the sign in form (e.g. "Sign in with...")
@@ -33,7 +36,6 @@ export const authOptions: NextAuthOptions = {
 						email: credentials.email
 					}
 				})
-
 				if (!user) {
 					return null
 				}
@@ -42,7 +44,6 @@ export const authOptions: NextAuthOptions = {
 					credentials.password,
 					user.password
 				)
-
 				if (!isPasswordValid) {
 					return null
 				}
@@ -67,6 +68,13 @@ export const authOptions: NextAuthOptions = {
 		})
 	],
 	callbacks: {
+		session: ({ session, token }) => {
+			session.user.id = token.id
+			session.user.name = token.name;
+			session.user.role = token.role;
+			console.log('session callback', { session, token })
+			return session;
+		},
 		jwt: ({ token, user }) => {
 			if (user) {
 				// name and email are already included by default
@@ -76,13 +84,6 @@ export const authOptions: NextAuthOptions = {
 			}
 			console.log('jwt callback', { token, user })
 			return token;
-		},
-		session: ({ session, token }) => {
-			session.user.id = token.id
-			session.user.name = token.name;
-			session.user.role = token.role;
-			console.log('session callback', { session, token })
-			return session;
 		},
 	},
 }
