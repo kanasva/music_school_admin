@@ -1,130 +1,90 @@
 "use client"
 
-import LocaleSwitcher from '@/components/locale-switcher';
-import { Locale } from '@/lib/i18n-config'
+import Link from "next/link"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form"
+import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { useSession, signIn, signOut } from "next-auth/react";
 
 
+const formSchema = z.object({
+	email: z.string().email({
+		message: "Invalid email address",
+	}),
+	password: z.string().min(1, {
+		message: "Password must be at least 1 characters.",
+	}),
+})
 
-export default async function Example({
-  params: { lang },
-}: {
-  params: { lang: Locale }
-}) {
-  const session = useSession().data
-  
-  return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
-          </h2>
-        </div>
+export default function SignIn() {
+	// 1. Define your form.
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	})
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
+	// 2. Define a submit handler.
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		console.log(values)
+		const result = await signIn("credentials", {
+			email: values.email,
+			password: values.password,
+			callbackUrl: "/admin",
+		});
+	};
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Password
-                </label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Forgot password?
-                  </a>
-                </div>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
 
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign in
-              </button>
-            </div>
-          </form>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{' '}
-            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-              Start a 14 day free trial
-            </a>
-          </p>
-        </div>
-      </div>
-
-      {/* <LocaleSwitcher /> */}
-      {/* <div>
-	      <h1>Sign in</h1>
-	      <button onClick={()=> signIn()}>
-		      Sign in
-	      </button>
-	      <button onClick={()=> signOut()}>
-		      Sign out
-	      </button>
-	      <pre>{JSON.stringify(session, null, 2)}</pre>
-      </div> */}
-    </>
-  )
+	return (
+		<div className="flex flex-col w-screen h-screen justify-center items-center">
+			<Card className="flex flex-col w-full max-w-sm">
+				<h1 className="p-4 w-full text-center">Sign in</h1>
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4">
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email</FormLabel>
+									<FormControl>
+										<Input placeholder="your@email.com" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Password</FormLabel>
+									<FormControl>
+										<Input type="password" placeholder="Your password" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<Button type="submit" className="w-full">Sign in</Button>
+					</form>
+				</Form>
+			</Card>
+		</div>
+	)
 }
-
-
-
-
-// "use client"
-
-// import { useSession, signIn, signOut } from "next-auth/react";
-
-// export default function SignIn() {
-//   const session = useSession().data
-
-//   return (
-    
-//     <>
-//       <div>
-//         <h1>Sign in</h1>
-//         <button onClick={() => signIn()}>
-//           Sign in
-//         </button>
-//         <button onClick={() => signOut()}>
-//           Sign out
-//         </button>
-//         <pre>{JSON.stringify(session, null, 2)}</pre>
-//       </div>
-//     </>
-//   )
-// }

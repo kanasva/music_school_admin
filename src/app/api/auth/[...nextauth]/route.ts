@@ -15,31 +15,34 @@ export const authOptions: NextAuthOptions = {
 		strategy: "jwt"
 	},
 	pages: {
-		// signIn: '/sign-in',
+		signIn: '/en/sign-in',
 	},
 	providers: [
 		CredentialsProvider({
+			// for default login page
 			// The name to display on the sign in form (e.g. "Sign in with...")
 			name: "Credentials",
-			// for default login page
+			// Label
 			credentials: {
 				email: { label: "Email", type: "email" },
 				password: { label: "Password", type: "password" }
 			},
 			async authorize(credentials) {
+				// check if having input
 				if (!credentials?.email || !credentials.password) {
 					return null
 				}
-
+				// find in database by email
 				const user = await prisma.user.findUnique({
 					where: {
 						email: credentials.email
 					}
 				})
+				// if email not found return
 				if (!user) {
 					return null
 				}
-
+				// check password
 				const isPasswordValid = await compare(
 					credentials.password,
 					user.password
@@ -47,30 +50,29 @@ export const authOptions: NextAuthOptions = {
 				if (!isPasswordValid) {
 					return null
 				}
-
-				const name = await prisma.student.findUnique({
-					where: {
-						userId: user.id
-					},
-					select: {
-						givenName: true,
-					},
-				});
+				// // retrive name to be in session
+				// const name = await prisma.student.findUnique({
+				// 	where: {
+				// 		userId: user.id
+				// 	},
+				// 	select: {
+				// 		givenName: true,
+				// 	},
+				// });
 
 				return {
 					id: user.id + "",
-					name: name!.givenName,
+					// name: name!.givenName,
 					email: user.email,
 					role: user.role
 				}
-
 			}
 		})
 	],
 	callbacks: {
 		session: ({ session, token }) => {
 			session.user.id = token.id
-			session.user.name = token.name;
+			// session.user.name = token.name;
 			session.user.role = token.role;
 			console.log('session callback', { session, token })
 			return session;
@@ -79,7 +81,7 @@ export const authOptions: NextAuthOptions = {
 			if (user) {
 				// name and email are already included by default
 				token.id = user.id
-				token.name = user.name
+				// token.name = user.name
 				token.role = user.role
 			}
 			console.log('jwt callback', { token, user })

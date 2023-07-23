@@ -12,14 +12,25 @@ datasource db {
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
+enum RoleType {
+  STUDENT
+  TEACHER
+  ADMIN
+  MANAGER
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   password  String
-  role      String   @default("STUDENT")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      RoleType
   student   Student?
+  teacher   Teacher?
+  staff     Staff?
+  address   Address[]
+  phone     Phone[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 enum GenderType {
@@ -29,19 +40,21 @@ enum GenderType {
 }
 
 model Student {
-  id          Int        @id @default(autoincrement())
-  givenName   String
-  middleName  String
-  familyName  String
-  nickName    String
-  dateOfBirth DateTime
-  gender      GenderType
-  contact     Contact    @relation(fields: [contactId], references: [id])
-  contactId   Int
-  user        User       @relation(fields: [userId], references: [id])
-  userId      Int        @unique
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id              Int        @id @default(autoincrement())
+  givenName       String
+  middleName      String?
+  familyName      String
+  nickName        String?
+  dateOfBirth     DateTime
+  gender          GenderType
+  school          Int
+  lineId          String?
+  parentFirstName String?
+  parentLastName  String?
+  user            User       @relation(fields: [userId], references: [id])
+  userId          Int        @unique
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 }
 
 model Teacher {
@@ -52,15 +65,11 @@ model Teacher {
   nickName    String
   dateOfBirth DateTime
   gender      GenderType
-  contact     Contact    @relation(fields: [contactId], references: [id])
-  contactId   Int
+  lineId      String?
+  user        User       @relation(fields: [userId], references: [id])
+  userId      Int        @unique
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-}
-
-enum RoleType {
-  ADMIN
-  MANAGER
 }
 
 model Staff {
@@ -71,15 +80,15 @@ model Staff {
   nickName    String
   dateOfBirth DateTime
   gender      GenderType
-  role        RoleType
-  contact     Contact    @relation(fields: [contactId], references: [id])
-  contactId   Int
+  lineId      String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  userId      Int        @unique
+  user        User       @relation(fields: [userId], references: [id])
 }
 
-model Contact {
-  id          Int       @id @default(autoincrement())
+model Address {
+  id          Int      @id @default(autoincrement())
   houseNo     String
   building    String
   floor       String
@@ -91,20 +100,18 @@ model Contact {
   province    String
   postalCode  Int
   country     String
-  students    Student[]
-  teachers    Teacher[]
-  staffs      Staff[]
-  phones      Phone[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Phone {
   id        Int      @id @default(autoincrement())
-  contactId Int
   number    String
   type      String
-  contact   Contact  @relation(fields: [contactId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

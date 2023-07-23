@@ -30,9 +30,10 @@ export default function try2() {
 			<main className="
 				border-2 border-red-500
 				w-full
-				peurstars
 				p-4
 				flex flex-col
+				items-center
+				justify-center
 			">
 				main
 				<article className="
