@@ -21,15 +21,12 @@ export default function RootLayout({
 	params: { lang: string }
 }) {
 	return (
-		// <html lang={params.lang}>
-		// 	<body>
-		// 		<Provider>
-		// 			<Nav />
-		<>
-			{children}
-		</>
-		// </Provider>
-		//	</body>
-		//	</html>
+		<html lang={params.lang}>
+			<body>
+				<Provider>
+					{children}
+				</Provider>
+			</body>
+		</html>
 	)
 }
