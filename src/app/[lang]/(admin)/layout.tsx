@@ -2,6 +2,9 @@ import { NavAdmin } from '@/components/NavAdmin'
 import '@/app/globals.css'
 import Provider from '@/components/Provider'
 import { i18n } from '@/lib/i18n-config'
+import { HiHome, HiDocumentText, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards } from 'react-icons/hi';
+import { PiChalkboardTeacherFill, PiStudentFill } from "react-icons/pi";
+import { BsFillArrowRightCircleFill } from "react-icons/bs"
 
 
 export const metadata = {
@@ -13,6 +16,7 @@ export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }))
 }
 
+
 export default function RootLayout({
   children,
   params
@@ -22,9 +26,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang={params.lang}>
-      <body className="flex min-h-full border-red-500 border">
+      <body className="flex">
         <Provider>
-          <NavAdmin />
+          <header className="border-r-2 h-screen">
+            <h1 className="text-center py-4">MSA</h1>
+            <NavAdmin lang={params.lang} />
+          </header>
           {children}
         </Provider>
       </body>

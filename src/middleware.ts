@@ -49,34 +49,34 @@ function i18nMiddleware(request: NextRequest) {
 // main middleware
 export async function middleware(request: NextRequestWithAuth) {
 	const pathname = request.nextUrl.pathname
-	console.log(pathname)
+	// console.log(pathname)
 
 	// path /th/sign-in || /en/sign-in can enter directly
 	if (pathname === ('/th/sign-in') ||
 		pathname === ('/en/sign-in')) {
-		console.log("1")
+		// console.log("1")
 		return
 	}
 
 	// path /sign-in only pass i18nMiddleware
 	if (pathname === ('/sign-in')) {
-		console.log("2")
+		// console.log("2")
 		return i18nMiddleware(request)
 	}
 
 	// other path pass auth
 	else {
-		console.log("3");
+		// console.log("3");
 		const invalidPrefixes = ['api', '_next/static', '_next/image', 'favicon.ico'];
 		if (!invalidPrefixes.some(prefix => pathname.startsWith(`/${prefix}`))) {
-			console.log("4");
+			// console.log("4");
 			// need to solve the type, look here: https://stackoverflow.com/questions/76702752/chaining-multiple-middlewares-in-next-js, 
 			// https://www.youtube.com/watch?v=9bI3ihPg5j0,
 			// https://locize.com/blog/next-13-app-dir-i18n/
 			return (withAuth(i18nMiddleware) as any)(request);
 		}
 		else {
-			console.log("5");
+			// console.log("5");
 			return withAuth(request)
 		}
 	}

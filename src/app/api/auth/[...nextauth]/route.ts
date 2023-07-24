@@ -74,7 +74,7 @@ export const authOptions: NextAuthOptions = {
 			session.user.id = token.id
 			// session.user.name = token.name;
 			session.user.role = token.role;
-			console.log('session callback', { session, token })
+			// console.log('session callback', { session, token })
 			return session;
 		},
 		jwt: ({ token, user }) => {
@@ -84,7 +84,7 @@ export const authOptions: NextAuthOptions = {
 				// token.name = user.name
 				token.role = user.role
 			}
-			console.log('jwt callback', { token, user })
+			// console.log('jwt callback', { token, user })
 			return token;
 		},
 	},
