@@ -40,7 +40,6 @@ export default function SignIn() {
 
 	// 2. Define a submit handler.
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values)
 		const result = await signIn("credentials", {
 			email: values.email,
 			password: values.password,
