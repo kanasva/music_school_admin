@@ -52,7 +52,6 @@ export default async function Staff() {
 						<BreadcrumbLink href="/components">Staff</BreadcrumbLink>
 					</BreadcrumbItem>
 				</Breadcrumb>
-
 				<CardHeader className="flex flex-row items-center justify-center">
 					<CardTitle className="align-bottom">Staff</CardTitle>
 					<Button className="ml-auto" style={{ marginTop: 0 }}><HiPlus /><span className="mr-2" />Add Staff</Button>
