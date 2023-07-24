@@ -43,7 +43,7 @@ export default function SignIn() {
 		const result = await signIn("credentials", {
 			email: values.email,
 			password: values.password,
-			callbackUrl: "/admin",
+			callbackUrl: "/admin/staff",
 		});
 	};
 
