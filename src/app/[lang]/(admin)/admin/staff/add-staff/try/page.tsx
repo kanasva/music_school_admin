@@ -13,7 +13,7 @@ const formSchema = z.object({
 
 
 
-export default function page() {
+export default function Try() {
 
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof formSchema>>({
