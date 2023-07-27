@@ -44,10 +44,10 @@ model Student {
   givenName       String
   middleName      String?
   familyName      String
-  nickName        String?
+  nickName        String
   dateOfBirth     DateTime
   gender          GenderType
-  school          Int
+  school          String
   lineId          String?
   parentFirstName String?
   parentLastName  String?
@@ -60,7 +60,7 @@ model Student {
 model Teacher {
   id          Int        @id @default(autoincrement())
   givenName   String
-  middleName  String
+  middleName  String?
   familyName  String
   nickName    String
   dateOfBirth DateTime
@@ -75,7 +75,7 @@ model Teacher {
 model Staff {
   id          Int        @id @default(autoincrement())
   givenName   String
-  middleName  String
+  middleName  String?
   familyName  String
   nickName    String
   dateOfBirth DateTime
@@ -90,15 +90,15 @@ model Staff {
 model Address {
   id          Int      @id @default(autoincrement())
   houseNo     String
-  building    String
-  floor       String
-  mooNo       Int
-  soi         String
-  road        String
+  building    String?
+  floor       String?
+  mooNo       String?
+  soi         String?
+  road        String?
   subDistrict String
   district    String
   province    String
-  postalCode  Int
+  postalCode  String
   country     String
   user        User     @relation(fields: [userId], references: [id])
   userId      Int

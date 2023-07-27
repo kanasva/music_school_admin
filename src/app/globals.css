@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Remove Arrows/Spinners */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+
 textarea,
 input,
 select {
@@ -16,6 +29,11 @@ input[type="radio"] {
 /* kan custom */
 h1 {
 	font-size: x-large;
+}
+
+/* Carlendar component */
+.rdp-vhidden {
+	@apply hidden;
 }
 
 /* shadcn-ui */

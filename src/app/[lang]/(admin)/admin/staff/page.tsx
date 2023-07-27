@@ -23,10 +23,11 @@ import {
 	BreadcrumbItem,
 	BreadcrumbLink,
 } from "@/components/ui/breadcrumb"
-import { Payment, columns } from "./columns"
+import { staff, columns } from "./columns"
 import { DataTable } from "./data-table"
 import { HiPlus } from "react-icons/hi";
 import { prisma } from "@/lib/prisma"
+import Link from "next/link"
 
 
 async function getStaff() {
@@ -46,15 +47,17 @@ export default async function Staff() {
 			<Card className="m-2">
 				<Breadcrumb className="px-4 pt-4">
 					<BreadcrumbItem>
-						<BreadcrumbLink href="/">Home</BreadcrumbLink>
+						<BreadcrumbLink href="/admin">Home</BreadcrumbLink>
 					</BreadcrumbItem>
 					<BreadcrumbItem isCurrentPage>
-						<BreadcrumbLink href="/components">Staff</BreadcrumbLink>
+						<BreadcrumbLink href="/admin/staff">Staff</BreadcrumbLink>
 					</BreadcrumbItem>
 				</Breadcrumb>
 				<CardHeader className="flex flex-row items-center justify-center">
 					<CardTitle className="align-bottom">Staff</CardTitle>
-					<Button className="ml-auto" style={{ marginTop: 0 }}><HiPlus /><span className="mr-2" />Add Staff</Button>
+					<Link href="/admin/staff/add-staff" className="ml-auto">
+						<Button style={{ marginTop: 0 }}><HiPlus /><span className="mr-2" />Add Staff</Button>
+					</Link>
 				</CardHeader>
 				<CardContent>
 					<DataTable columns={columns} data={staff} />
