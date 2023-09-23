@@ -35,11 +35,11 @@ export default function RootLayout({
   return (
     <Provider>
       <html lang={params.lang}>
-        <body className="flex min-w-[1024px] items-center justify-center">
-          <div className="h-screen w-full bg-gray-200"></div>
+        <body className="flex h-auto min-w-[1024px] justify-center">
+          <div className="h-auto w-full bg-gray-200"></div>
 
-          <div className="flex w-screen min-w-[1024px] max-w-screen-2xl flex-none">
-            <header className="h-screen bg-gray-200">
+          <div className="flex h-fit w-screen min-w-[1024px] max-w-screen-2xl flex-none border-2 border-red-200">
+            <header className="sticky top-0 h-screen bg-gray-200">
               <h1 className="py-4 text-center">MSA</h1>
               <SignOutButton />
               <nav>
@@ -50,7 +50,7 @@ export default function RootLayout({
             <main className="w-full p-6">{children}</main>
           </div>
 
-          <div className="h-screen w-full "></div>
+          <div className="h-auto w-full"></div>
         </body>
       </html>
     </Provider>

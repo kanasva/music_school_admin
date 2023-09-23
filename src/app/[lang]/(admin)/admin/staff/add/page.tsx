@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-} from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -14,11 +14,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useFieldArray } from "react-hook-form"
-import * as z from "zod"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, useFieldArray } from "react-hook-form";
+import * as z from "zod";
 import {
   Select,
   SelectContent,
@@ -27,12 +27,12 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { useRouter } from "next/navigation"
-import { addStaffSchema } from "./addStaffSchema"
+} from "@/components/ui/select";
+import { useRouter } from "next/navigation";
+import { addStaffSchema } from "./addStaffSchema";
 
 export default function AddStaff() {
-  const router = useRouter()
+  const router = useRouter();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof addStaffSchema>>({
@@ -64,63 +64,63 @@ export default function AddStaff() {
       postalCode: "",
       country: "Thailand",
     },
-  })
+  });
 
-  const { register, control } = form
+  const { register, control } = form;
 
   const { fields, append, remove } = useFieldArray({
     name: "phone",
     control,
-  })
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof addStaffSchema>) {
-    console.log(values)
+    console.log(values);
     const res = await fetch("/api/admin/staff/add", {
       method: "POST",
       body: JSON.stringify(values),
       headers: {
         "Content-type": "application/json",
       },
-    })
-    await res.json()
-    console.log(res)
+    });
+    await res.json();
+    console.log(res);
     if (res.ok) {
-      router.push("/admin/staff")
+      router.push("/admin/staff");
     } else {
-      alert("Unsuccessful")
+      alert("Unsuccessful");
     }
   }
 
   const calculateAge = (dob: string) => {
-    const dobDate = new Date(dob)
-    const now = new Date()
+    const dobDate = new Date(dob);
+    const now = new Date();
 
-    let years = now.getFullYear() - dobDate.getFullYear()
-    let months = now.getMonth() - dobDate.getMonth()
-    let days = now.getDate() - dobDate.getDate()
+    let years = now.getFullYear() - dobDate.getFullYear();
+    let months = now.getMonth() - dobDate.getMonth();
+    let days = now.getDate() - dobDate.getDate();
 
     if (months < 0 || (months === 0 && days < 0)) {
-      years--
-      months = (months + 12) % 12
+      years--;
+      months = (months + 12) % 12;
     }
 
     if (days < 0) {
-      months--
-      let previousMonth = new Date(now.getFullYear(), now.getMonth(), 0)
-      days = previousMonth.getDate() + days
+      months--;
+      let previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+      days = previousMonth.getDate() + days;
     }
 
-    return `${years} years, ${months} months, ${days} days`
-  }
-  const dob = form.watch("dateOfBirth")
-  const age = dob ? calculateAge(dob) : "please put your date of birth"
+    return `${years} years, ${months} months, ${days} days`;
+  };
+  const dob = form.watch("dateOfBirth");
+  const age = dob ? calculateAge(dob) : "please put your date of birth";
 
   const h4 =
-    "text-xl font-normal leading-none tracking-tight align-bottom pb-4 pt-6"
+    "text-xl font-normal leading-none tracking-tight align-bottom pb-4 pt-6";
 
   return (
-    <main className="w-full p-6">
+    <div>
       {/* Breadcrumb */}
       <Breadcrumb className="pb-6">
         <BreadcrumbItem>
@@ -139,7 +139,7 @@ export default function AddStaff() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-row justify-between gap-6">
-            <div className="flex flex-col w-full">
+            <div className="flex w-full flex-col">
               <Card className="w-full">
                 <CardHeader>
                   <CardTitle>Try Dynamic Form</CardTitle>
@@ -183,7 +183,7 @@ export default function AddStaff() {
                   </div>
                 </CardContent>
               </Card>
-              <Card className="w-full mt-6">
+              <Card className="mt-6 w-full">
                 {/* Sign-in Information */}
                 <CardHeader>
                   <CardTitle>Sign-in Information</CardTitle>
@@ -222,7 +222,7 @@ export default function AddStaff() {
                   />
                 </CardContent>
               </Card>
-              <Card className="w-full mt-6">
+              <Card className="mt-6 w-full">
                 <CardHeader>
                   <CardTitle>Personal Information</CardTitle>
                 </CardHeader>
@@ -324,7 +324,7 @@ export default function AddStaff() {
                 </CardContent>
               </Card>
             </div>
-            <div className="flex flex-col w-full">
+            <div className="flex w-full flex-col">
               <Card className="w-full">
                 <CardHeader>
                   <CardTitle>Contact</CardTitle>
@@ -554,6 +554,6 @@ export default function AddStaff() {
           </Button>
         </form>
       </Form>
-    </main>
-  )
+    </div>
+  );
 }
