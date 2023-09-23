@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { addStaffSchema } from "./addStaffSchema";
+import { Fragment } from "react";
 
 export default function AddStaff() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function AddStaff() {
   const form = useForm<z.infer<typeof addStaffSchema>>({
     resolver: zodResolver(addStaffSchema),
     defaultValues: {
-      phone: [{ number: "" }],
+      phone: [{ number: "", type: "" }],
       email: "",
       password: "",
       givenName: "",
@@ -47,10 +48,6 @@ export default function AddStaff() {
       nickName: "",
       dateOfBirth: "",
       gender: "",
-      primaryPhone: "",
-      primaryPhoneType: "",
-      secondaryPhone: "",
-      secondaryPhoneType: "",
       lineId: "",
       houseNo: "",
       building: "",
@@ -66,30 +63,28 @@ export default function AddStaff() {
     },
   });
 
-  const { register, control } = form;
-
   const { fields, append, remove } = useFieldArray({
     name: "phone",
-    control,
+    control: form.control,
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof addStaffSchema>) {
     console.log(values);
-    const res = await fetch("/api/admin/staff/add", {
-      method: "POST",
-      body: JSON.stringify(values),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
-    await res.json();
-    console.log(res);
-    if (res.ok) {
-      router.push("/admin/staff");
-    } else {
-      alert("Unsuccessful");
-    }
+    // const res = await fetch("/api/admin/staff/add", {
+    //   method: "POST",
+    //   body: JSON.stringify(values),
+    //   headers: {
+    //     "Content-type": "application/json",
+    //   },
+    // });
+    // await res.json();
+    // console.log(res);
+    // if (res.ok) {
+    //   router.push("/admin/staff");
+    // } else {
+    //   alert("Unsuccessful");
+    // }
   }
 
   const calculateAge = (dob: string) => {
@@ -121,7 +116,6 @@ export default function AddStaff() {
 
   return (
     <div>
-      {/* Breadcrumb */}
       <Breadcrumb className="pb-6">
         <BreadcrumbItem>
           <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
@@ -139,46 +133,6 @@ export default function AddStaff() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-row gap-6">
-            {/* <Card className="w-1/3">
-              <CardHeader>
-                <CardTitle>Try Dynamic Form</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div>
-                  {fields.map((field, index) => (
-                    <FormField
-                      control={form.control}
-                      name={`phone.${index}.number`}
-                      key={field.id}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Phone</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                          {index > 0 && (
-                            <button type="button" onClick={() => remove(index)}>
-                              Remove
-                            </button>
-                          )}
-                        </FormItem>
-                      )}
-                    />
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      append({
-                        number: "",
-                      })
-                    }
-                  >
-                    Add phone number
-                  </button>
-                </div>
-              </CardContent>
-            </Card> */}
             <div className="flex w-full flex-col gap-6">
               <Card className="w-full">
                 {/* Sign-in Information */}
@@ -325,58 +279,71 @@ export default function AddStaff() {
                   <CardTitle>Contact</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <FormField
-                    control={form.control}
-                    name="primaryPhone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Primary Phone</FormLabel>
-                        <FormControl>
-                          <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="primaryPhoneType"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Primary Phone Type</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="secondaryPhone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Secondary Phone</FormLabel>
-                        <FormControl>
-                          <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="secondaryPhoneType"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Secondary Phone Type</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {/* start phone */}
+                  {fields.map((field, index) => (
+                    <Fragment key={field.id}>
+                      <FormField
+                        control={form.control}
+                        name={`phone.${index}.number`}
+                        // key={field.id}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone {index + 1}</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`phone.${index}.type`}
+                        // key={field.id}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone {index + 1} Type</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            {index > 0 && (
+                              <div className="flex items-center justify-between pt-1">
+                                <Button
+                                  type="button"
+                                  variant="secondary"
+                                  onClick={() =>
+                                    append({ number: "", type: "" })
+                                  }
+                                >
+                                  + Phone {index + 2}
+                                </Button>
+                                <Button
+                                  variant="secondary"
+                                  type="button"
+                                  onClick={() => remove(index)}
+                                >
+                                  Remove Phone {index + 1}
+                                </Button>
+                              </div>
+                            )}
+                          </FormItem>
+                        )}
+                      />
+                    </Fragment>
+                  ))}
+                  {fields.length === 1 && (
+                    <div className="mb-2 text-left">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => append({ number: "", type: "" })}
+                      >
+                        + Phone 2
+                      </Button>
+                    </div>
+                  )}
+                  {/* end phone */}
                   <FormField
                     control={form.control}
                     name="lineId"

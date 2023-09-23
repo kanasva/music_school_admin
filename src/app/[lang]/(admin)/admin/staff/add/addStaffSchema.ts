@@ -1,10 +1,11 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const addStaffSchema = z.object({
   phone: z.array(
     z.object({
       number: z.string(),
-    })
+      type: z.string(),
+    }),
   ),
   email: z.string().toLowerCase().email({ message: "Invalid email address" }),
   password: z
@@ -16,10 +17,6 @@ export const addStaffSchema = z.object({
   nickName: z.string().nonempty(),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   gender: z.union([z.enum(["MALE", "FEMALE", "OTHER"]), z.string().nonempty()]),
-  primaryPhone: z.string().nonempty(),
-  primaryPhoneType: z.string().nonempty(),
-  secondaryPhone: z.string().optional(),
-  secondaryPhoneType: z.string().optional(),
   lineId: z.string().optional(),
   houseNo: z.string().nonempty(),
   building: z.string().optional(),
@@ -32,4 +29,4 @@ export const addStaffSchema = z.object({
   province: z.string().nonempty(),
   postalCode: z.string().nonempty(),
   country: z.string().nonempty(),
-})
+});
