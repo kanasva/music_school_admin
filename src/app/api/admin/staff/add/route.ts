@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import * as z from "zod"
-import { addStaffSchema } from "@/app/[lang]/(admin)/admin/staff/add/addStaffSchema"
-import { hash } from "bcrypt"
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import * as z from "zod";
+import { addStaffSchema } from "@/app/[lang]/(admin)/admin/staff/add/addStaffSchema";
+import { hash } from "bcrypt";
 
 enum RoleType {
   STUDENT = "STUDENT",
@@ -56,7 +56,7 @@ enum GenderType {
 // }
 
 export async function POST(req: Request) {
-  const data: z.infer<typeof addStaffSchema> = await req.json()
+  const data: z.infer<typeof addStaffSchema> = await req.json();
 
   const preparedData = {
     email: data.email,
@@ -90,37 +90,26 @@ export async function POST(req: Request) {
       },
     },
     phone: {
-      create: [
-        {
-          number: data.primaryPhone,
-          priority: 1,
-          type: data.primaryPhoneType,
-        },
-        ...(data.secondaryPhone
-          ? [
-              {
-                number: data.secondaryPhone,
-                priority: 2,
-                type: data.secondaryPhoneType || "", // default to empty string if it's not provided
-              },
-            ]
-          : []), // Don't create a second phone if it's not provided
-      ],
+      create: data.phone.map((phone, index) => ({
+        number: phone.number,
+        priority: index + 1, // Priority could be index + 1 if you want it to be ordered
+        type: phone.type,
+      })),
     },
-  }
+  };
 
   try {
     const createdStaff = await prisma.user.create({
       data: preparedData,
-    })
-    return NextResponse.json(createdStaff)
+    });
+    return NextResponse.json(createdStaff);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 400 })
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
     return NextResponse.json(
       { error: "An unexpected error occurred." },
-      { status: 500 }
-    )
+      { status: 500 },
+    );
   }
 }

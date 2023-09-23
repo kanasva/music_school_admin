@@ -28,13 +28,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
 import { addStaffSchema } from "./addStaffSchema";
 import { Fragment } from "react";
 
 export default function AddStaff() {
-  const router = useRouter();
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof addStaffSchema>>({
     resolver: zodResolver(addStaffSchema),
@@ -47,7 +44,7 @@ export default function AddStaff() {
       familyName: "",
       nickName: "",
       dateOfBirth: "",
-      gender: "",
+      gender: undefined,
       lineId: "",
       houseNo: "",
       building: "",
