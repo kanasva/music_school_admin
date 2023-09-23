@@ -1,20 +1,20 @@
-import * as React from "react"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import * as React from "react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-} from "@/components/ui/breadcrumb"
-import { HiPlus } from "react-icons/hi"
-import Link from "next/link"
-import { Suspense } from "react"
-import { StaffTable } from "./StaffTable"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/breadcrumb";
+import { HiPlus } from "react-icons/hi";
+import Link from "next/link";
+import { Suspense } from "react";
+import { StaffTable } from "./StaffTable";
+import { cn } from "@/lib/utils";
 
 export default function Staff() {
   return (
-    <main className="w-full p-6">
+    <>
       <Breadcrumb className="">
         <BreadcrumbItem>
           <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
@@ -43,6 +43,6 @@ export default function Staff() {
           <StaffTable />
         </Suspense>
       </div>
-    </main>
-  )
+    </>
+  );
 }

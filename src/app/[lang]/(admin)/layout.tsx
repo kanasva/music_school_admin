@@ -35,7 +35,25 @@ export default function RootLayout({
   return (
     <Provider>
       <html lang={params.lang}>
-        <body className="flex min-w-[1024px] flex-col items-center justify-center">
+        <body className="flex min-w-[1024px] items-center justify-center">
+          <div className="h-screen w-full bg-gray-200"></div>
+
+          <div className="flex w-screen min-w-[1024px] max-w-screen-2xl flex-none">
+            <header className="h-screen bg-gray-200">
+              <h1 className="py-4 text-center">MSA</h1>
+              <SignOutButton />
+              <nav>
+                <AdminNav lang={params.lang} />
+              </nav>
+            </header>
+
+            <main className="w-full p-6">{children}</main>
+          </div>
+
+          <div className="h-screen w-full "></div>
+        </body>
+
+        {/* <body className="flex min-w-[1024px] flex-col items-center justify-center">
           <div className="flex w-screen min-w-[1024px] max-w-screen-2xl ">
             <header className="sticky top-0 h-screen border-r">
               <h1 className="py-4 text-center">MSA</h1>
@@ -46,7 +64,7 @@ export default function RootLayout({
             </header>
             {children}
           </div>
-        </body>
+        </body> */}
       </html>
     </Provider>
   );
