@@ -138,52 +138,49 @@ export default function AddStaff() {
       <h2 className="pb-6">Add Staff</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex flex-row justify-between gap-6">
-            <div className="flex w-full flex-col">
+          <div className="flex flex-row gap-6">
+            {/* <Card className="w-1/3">
+              <CardHeader>
+                <CardTitle>Try Dynamic Form</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div>
+                  {fields.map((field, index) => (
+                    <FormField
+                      control={form.control}
+                      name={`phone.${index}.number`}
+                      key={field.id}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          {index > 0 && (
+                            <button type="button" onClick={() => remove(index)}>
+                              Remove
+                            </button>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      append({
+                        number: "",
+                      })
+                    }
+                  >
+                    Add phone number
+                  </button>
+                </div>
+              </CardContent>
+            </Card> */}
+            <div className="flex w-full flex-col gap-6">
               <Card className="w-full">
-                <CardHeader>
-                  <CardTitle>Try Dynamic Form</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div>
-                    {fields.map((field, index) => (
-                      <FormField
-                        control={form.control}
-                        name={`phone.${index}.number`}
-                        key={field.id}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Phone</FormLabel>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            {index > 0 && (
-                              <button
-                                type="button"
-                                onClick={() => remove(index)}
-                              >
-                                Remove
-                              </button>
-                            )}
-                          </FormItem>
-                        )}
-                      />
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        append({
-                          number: "",
-                        })
-                      }
-                    >
-                      Add phone number
-                    </button>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="mt-6 w-full">
                 {/* Sign-in Information */}
                 <CardHeader>
                   <CardTitle>Sign-in Information</CardTitle>
@@ -222,7 +219,7 @@ export default function AddStaff() {
                   />
                 </CardContent>
               </Card>
-              <Card className="mt-6 w-full">
+              <Card className="w-full">
                 <CardHeader>
                   <CardTitle>Personal Information</CardTitle>
                 </CardHeader>
@@ -323,8 +320,6 @@ export default function AddStaff() {
                   />
                 </CardContent>
               </Card>
-            </div>
-            <div className="flex w-full flex-col">
               <Card className="w-full">
                 <CardHeader>
                   <CardTitle>Contact</CardTitle>
@@ -397,6 +392,8 @@ export default function AddStaff() {
                   />
                 </CardContent>
               </Card>
+            </div>
+            <div className="flex w-full flex-col gap-6">
               <Card className="w-full">
                 <CardHeader>
                   <CardTitle>Address</CardTitle>
@@ -547,11 +544,9 @@ export default function AddStaff() {
                   />
                 </CardContent>
               </Card>
+              <Button type="submit">Submit</Button>
             </div>
           </div>
-          <Button type="submit" className="mt-6">
-            Submit
-          </Button>
         </form>
       </Form>
     </div>
