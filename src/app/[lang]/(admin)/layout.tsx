@@ -52,19 +52,6 @@ export default function RootLayout({
 
           <div className="h-screen w-full "></div>
         </body>
-
-        {/* <body className="flex min-w-[1024px] flex-col items-center justify-center">
-          <div className="flex w-screen min-w-[1024px] max-w-screen-2xl ">
-            <header className="sticky top-0 h-screen border-r">
-              <h1 className="py-4 text-center">MSA</h1>
-              <SignOutButton />
-              <nav>
-                <AdminNav lang={params.lang} />
-              </nav>
-            </header>
-            {children}
-          </div>
-        </body> */}
       </html>
     </Provider>
   );
