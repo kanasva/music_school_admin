@@ -285,7 +285,6 @@ export default function AddStaff() {
                       <FormField
                         control={form.control}
                         name={`phone.${index}.number`}
-                        // key={field.id}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Phone {index + 1}</FormLabel>
@@ -299,7 +298,6 @@ export default function AddStaff() {
                       <FormField
                         control={form.control}
                         name={`phone.${index}.type`}
-                        // key={field.id}
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Phone {index + 1} Type</FormLabel>
