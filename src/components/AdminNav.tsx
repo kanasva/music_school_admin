@@ -64,7 +64,7 @@ export function AdminNav({ lang }: { lang: string }) {
                   (path === "/" + lang + "/admin" && item.href === "/admin") ||
                     (item.href !== "/admin" &&
                       path.startsWith("/" + lang + item.href))
-                    ? "bg-white"
+                    ? "bg-background"
                     : "transparent",
                   item.disabled && "cursor-not-allowed opacity-80",
                 )}

@@ -45,9 +45,8 @@ h3 {
   letter-spacing: -0.025em; /* tracking-tight */
 }
 
-/* Calendar component */
-.rdp-vhidden {
-  @apply hidden;
+:focus-visible {
+  @apply outline-ring ring-ring;
 }
 
 /* shadcn-ui */
