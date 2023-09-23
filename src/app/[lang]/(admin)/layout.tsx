@@ -38,7 +38,7 @@ export default function RootLayout({
         <body className="flex h-auto min-w-[1024px] justify-center">
           <div className="h-auto w-full bg-gray-200"></div>
 
-          <div className="flex h-fit w-screen min-w-[1024px] max-w-screen-2xl flex-none border-2 border-red-200">
+          <div className="flex h-fit w-screen min-w-[1024px] max-w-screen-2xl flex-none">
             <header className="sticky top-0 h-screen bg-gray-200">
               <h1 className="py-4 text-center">MSA</h1>
               <SignOutButton />
