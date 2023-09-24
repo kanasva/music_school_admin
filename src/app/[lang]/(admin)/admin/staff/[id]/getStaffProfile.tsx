@@ -1,8 +1,10 @@
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/prisma";
 
 export async function getStaffProfile(id: string) {
-  // const staffId = parseInt(id, 10)
-  // if (staffId == null) throw new Error("Username undefined")
+  const parsedId = parseInt(id, 10);
+  if (isNaN(parsedId)) {
+    throw new Error("Invalid ID format");
+  }
   const staffProfile = await prisma.staff.findUnique({
     where: {
       id: parseInt(id, 10),
@@ -18,7 +20,6 @@ export async function getStaffProfile(id: string) {
       user: {
         select: {
           email: true,
-          password: true,
           role: true,
           address: {
             select: {
@@ -45,6 +46,6 @@ export async function getStaffProfile(id: string) {
         },
       },
     },
-  })
-  return staffProfile
+  });
+  return staffProfile;
 }

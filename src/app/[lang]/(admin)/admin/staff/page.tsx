@@ -26,15 +26,12 @@ export default function Staff() {
 
       <div className="flex flex-row items-center justify-between py-6">
         <h2>Staff</h2>
-        <Link
-          href="/admin/staff/add"
-          className={cn(buttonVariants({ size: "default" }))}
-        >
-          {/* <Button style={{ marginTop: 0 }}> */}
-          <HiPlus />
-          <span className="mr-2" />
-          Add Staff
-          {/* </Button> */}
+        <Link href="/admin/staff/add">
+          <Button>
+            <HiPlus />
+            <span className="mr-2" />
+            Add Staff
+          </Button>
         </Link>
       </div>
 

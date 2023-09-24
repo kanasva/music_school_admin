@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+} from "@/components/ui/breadcrumb"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -14,11 +14,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useFieldArray } from "react-hook-form";
-import * as z from "zod";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm, useFieldArray } from "react-hook-form"
+import * as z from "zod"
 import {
   Select,
   SelectContent,
@@ -27,11 +27,14 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { addStaffSchema } from "./addStaffSchema";
-import { Fragment } from "react";
+} from "@/components/ui/select"
+import { addStaffSchema } from "./addStaffSchema"
+import { Fragment } from "react"
+import { useRouter } from "next/navigation"
 
 export default function AddStaff() {
+  const router = useRouter()
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof addStaffSchema>>({
     resolver: zodResolver(addStaffSchema),
@@ -58,58 +61,58 @@ export default function AddStaff() {
       postalCode: "",
       country: "Thailand",
     },
-  });
+  })
 
   const { fields, append, remove } = useFieldArray({
     name: "phone",
     control: form.control,
-  });
+  })
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof addStaffSchema>) {
-    console.log(values);
-    // const res = await fetch("/api/admin/staff/add", {
-    //   method: "POST",
-    //   body: JSON.stringify(values),
-    //   headers: {
-    //     "Content-type": "application/json",
-    //   },
-    // });
-    // await res.json();
-    // console.log(res);
-    // if (res.ok) {
-    //   router.push("/admin/staff");
-    // } else {
-    //   alert("Unsuccessful");
-    // }
+    console.log(values)
+    const res = await fetch("/api/admin/staff/add", {
+      method: "POST",
+      body: JSON.stringify(values),
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+    await res.json()
+    console.log(res)
+    if (res.ok) {
+      router.push("/admin/staff")
+    } else {
+      alert("Unsuccessful")
+    }
   }
 
   const calculateAge = (dob: string) => {
-    const dobDate = new Date(dob);
-    const now = new Date();
+    const dobDate = new Date(dob)
+    const now = new Date()
 
-    let years = now.getFullYear() - dobDate.getFullYear();
-    let months = now.getMonth() - dobDate.getMonth();
-    let days = now.getDate() - dobDate.getDate();
+    let years = now.getFullYear() - dobDate.getFullYear()
+    let months = now.getMonth() - dobDate.getMonth()
+    let days = now.getDate() - dobDate.getDate()
 
     if (months < 0 || (months === 0 && days < 0)) {
-      years--;
-      months = (months + 12) % 12;
+      years--
+      months = (months + 12) % 12
     }
 
     if (days < 0) {
-      months--;
-      let previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-      days = previousMonth.getDate() + days;
+      months--
+      let previousMonth = new Date(now.getFullYear(), now.getMonth(), 0)
+      days = previousMonth.getDate() + days
     }
 
-    return `${years} years, ${months} months, ${days} days`;
-  };
-  const dob = form.watch("dateOfBirth");
-  const age = dob ? calculateAge(dob) : "please put your date of birth";
+    return `${years} years, ${months} months, ${days} days`
+  }
+  const dob = form.watch("dateOfBirth")
+  const age = dob ? calculateAge(dob) : "please put your date of birth"
 
   const h4 =
-    "text-xl font-normal leading-none tracking-tight align-bottom pb-4 pt-6";
+    "text-xl font-normal leading-none tracking-tight align-bottom pb-4 pt-6"
 
   return (
     <div>
@@ -219,7 +222,7 @@ export default function AddStaff() {
                     name="nickName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nick Name</FormLabel>
+                        <FormLabel>Nickname</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
@@ -512,5 +515,5 @@ export default function AddStaff() {
         </form>
       </Form>
     </div>
-  );
+  )
 }

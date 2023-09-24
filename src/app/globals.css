@@ -28,21 +28,19 @@ input[type="radio"] {
 
 /* kan custom */
 h1 {
-  font-size: 2.25rem; /* text-4xl */
-  font-weight: 800; /* font-extrabold */
-  letter-spacing: -0.05em; /* tracking-tighter*/
+  @apply text-4xl font-extrabold tracking-tighter;
 }
 
 h2 {
-  font-size: 1.875rem; /* text-3xl */
-  font-weight: 600; /* font-semibold */
-  letter-spacing: -0.025em; /* tracking-tight */
+  @apply text-3xl font-semibold tracking-tight;
 }
 
 h3 {
-  font-size: 1.5rem; /* text-2xl */
-  font-weight: 600; /* font-semibold */
-  letter-spacing: -0.025em; /* tracking-tight */
+  @apply text-2xl font-semibold tracking-tight;
+}
+
+h4 {
+  @apply mb-2 mt-4 text-xl font-medium tracking-tight;
 }
 
 :focus-visible {
