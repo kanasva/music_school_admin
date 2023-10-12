@@ -1,59 +1,6 @@
 import { PrismaClient, RoleType, GenderType } from "@prisma/client"
 import { hash } from "bcrypt"
 
-// const prisma = new PrismaClient();
-
-// async function main() {
-//   const password = await hash("aaa", 12);
-//   const user = await prisma.user.upsert({
-//     where: { email: "aaa@aaa.com" },
-//     update: {},
-//     create: {
-//       email: "aaa@aaa.com",
-//       password: password,
-//       role: "STUDENT",
-//     },
-//   });
-//   const password2 = await hash("bbb", 12);
-//   const user2 = await prisma.user.upsert({
-//     where: { email: "bbb@bbb.com" },
-//     update: {},
-//     create: {
-//       email: "bbb@bbb.com",
-//       password: password2,
-//       role: "TEACHER",
-//     },
-//   });
-//   const password3 = await hash("ccc", 12);
-//   const user3 = await prisma.user.upsert({
-//     where: { email: "ccc@ccc.com" },
-//     update: {},
-//     create: {
-//       email: "ccc@ccc.com",
-//       password: password3,
-//       role: "ADMIN",
-//     },
-//   });
-//   const password4 = await hash("ddd", 12);
-//   const user4 = await prisma.user.upsert({
-//     where: { email: "ddd@ddd.com" },
-//     update: {},
-//     create: {
-//       email: "ddd@ddd.com",
-//       password: password4,
-//       role: "MANAGER",
-//     },
-//   });
-// }
-
-// main()
-//   .then(() => prisma.$disconnect())
-//   .catch(async (e) => {
-//     console.error(e);
-//     await prisma.$disconnect();
-//     process.exit(1);
-//   });
-
 const prisma = new PrismaClient()
 
 const mockStaffs = [
@@ -133,6 +80,84 @@ const mockStaffs = [
     phone: [
       { number: "07700543210", type: "mobile" },
       { number: "02074321098", type: "work" },
+    ],
+  },
+  {
+    email: "lisa.jones@example.com",
+    password: "strongPassword4",
+    givenName: "Lisa",
+    middleName: "",
+    familyName: "Jones",
+    nickName: "Lis",
+    dateOfBirth: new Date("1985-09-20"),
+    gender: "female",
+    lineId: "LisaJ85",
+    houseNo: "42",
+    building: "Cedar Heights",
+    floor: "3",
+    mooNo: "12",
+    soi: "Maple Lane",
+    road: "Main Street",
+    subDistrict: "North",
+    district: "Downtown",
+    province: "Essex",
+    postalCode: "34567",
+    country: "UK",
+    phone: [
+      { number: "07700876543", type: "mobile" },
+      { number: "02071234567", type: "work" },
+    ],
+  },
+  {
+    email: "david.wilson@example.com",
+    password: "securePassword5",
+    givenName: "David",
+    middleName: "Michael",
+    familyName: "Wilson",
+    nickName: "Dave",
+    dateOfBirth: new Date("1978-03-15"),
+    gender: "male",
+    lineId: "DaveW78",
+    houseNo: "55",
+    building: "Oak Residences",
+    floor: "4",
+    mooNo: "8",
+    soi: "Beech Avenue",
+    road: "Oak Street",
+    subDistrict: "South",
+    district: "Midtown",
+    province: "Kent",
+    postalCode: "45678",
+    country: "UK",
+    phone: [
+      { number: "07700678901", type: "mobile" },
+      { number: "02075678901", type: "work" },
+    ],
+  },
+  {
+    email: "emma.davies@example.com",
+    password: "password123",
+    givenName: "Emma",
+    middleName: "Elizabeth",
+    familyName: "Davies",
+    nickName: "Em",
+    dateOfBirth: new Date("1994-11-10"),
+    gender: "female",
+    lineId: "EmD94",
+    houseNo: "23",
+    building: "Willow View",
+    floor: "2",
+    mooNo: "3",
+    soi: "Fern Lane",
+    road: "Grove Road",
+    subDistrict: "East",
+    district: "Suburbia",
+    province: "Surrey",
+    postalCode: "56789",
+    country: "UK",
+    phone: [
+      { number: "07700123456", type: "mobile" },
+      { number: "02071234567", type: "work" },
     ],
   },
 ]

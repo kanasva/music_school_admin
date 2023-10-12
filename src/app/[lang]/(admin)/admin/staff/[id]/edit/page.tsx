@@ -1,13 +1,16 @@
-import { getStaffProfile } from "../getStaffProfile";
-// import { EditStaffForm } from "./EditStaffForm"
+import { getStaffProfile } from "../getStaffProfile"
+import { EditStaffForm } from "./EditStaffForm"
 
 interface EditStaffProps {
-  params: { id: string };
+  params: { id: string }
 }
 
 export default async function EditStaff({ params }: EditStaffProps) {
-  const profile = await getStaffProfile(params.id);
+  const profile = await getStaffProfile(params.id)
   return (
-    <div>{/* <EditStaffForm params={params} profile={profile} /> */}aa</div>
-  );
+    <div>
+      <EditStaffForm params={params} profile={profile} />
+      aa
+    </div>
+  )
 }

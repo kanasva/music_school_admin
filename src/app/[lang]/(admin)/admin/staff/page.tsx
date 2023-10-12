@@ -1,16 +1,15 @@
-import * as React from "react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import * as React from "react"
+import { Button } from "@/components/ui/button"
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-} from "@/components/ui/breadcrumb";
-import { HiPlus } from "react-icons/hi";
-import Link from "next/link";
-import { Suspense } from "react";
-import { StaffTable } from "./StaffTable";
-import { cn } from "@/lib/utils";
+} from "@/components/ui/breadcrumb"
+import { HiPlus } from "react-icons/hi"
+import Link from "next/link"
+import { Suspense } from "react"
+import { StaffTable } from "./StaffTable"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Staff() {
   return (
@@ -36,10 +35,20 @@ export default function Staff() {
       </div>
 
       <div>
-        <Suspense fallback={<p>Loading...</p>}>
+        <Suspense
+          fallback={
+            <div className="space-y-1">
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+          }
+        >
           <StaffTable />
         </Suspense>
       </div>
     </>
-  );
+  )
 }

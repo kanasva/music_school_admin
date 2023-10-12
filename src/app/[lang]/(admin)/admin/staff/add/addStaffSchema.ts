@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 export const addStaffSchema = z.object({
   phone: z.array(
@@ -30,7 +30,6 @@ export const addStaffSchema = z.object({
   middleName: z.optional(
     z
       .string()
-      .min(1, { message: "Middle name must be at least 1 character." })
       .max(30, { message: "Middle name must be no more than 30 characters." }),
   ),
   familyName: z
@@ -100,4 +99,4 @@ export const addStaffSchema = z.object({
     .string()
     .min(2, { message: "Country must be at least 2 characters." })
     .max(50, { message: "Country must be no more than 50 characters." }),
-});
+})

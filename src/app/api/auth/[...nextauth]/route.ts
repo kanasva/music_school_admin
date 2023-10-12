@@ -37,6 +37,30 @@ export const authOptions: NextAuthOptions = {
           where: {
             email: credentials.email,
           },
+          select: {
+            id: true, // Assuming you want to return the user's id
+            email: true, // and email, adjust as needed
+            password: true,
+            role: true,
+            student: {
+              select: {
+                givenName: true,
+                familyName: true,
+              },
+            },
+            teacher: {
+              select: {
+                givenName: true,
+                familyName: true,
+              },
+            },
+            staff: {
+              select: {
+                givenName: true,
+                familyName: true,
+              },
+            },
+          },
         })
         // if email not found return
         if (!user) {
@@ -45,24 +69,28 @@ export const authOptions: NextAuthOptions = {
         // check password
         const isPasswordValid = await compare(
           credentials.password,
-          user.password
+          user.password,
         )
         if (!isPasswordValid) {
           return null
         }
-        // // retrive name to be in session
-        // const name = await prisma.student.findUnique({
-        // 	where: {
-        // 		userId: user.id
-        // 	},
-        // 	select: {
-        // 		givenName: true,
-        // 	},
-        // });
+
+        let givenName, familyName
+
+        if (user.student) {
+          givenName = user.student.givenName
+          familyName = user.student.familyName
+        } else if (user.teacher) {
+          givenName = user.teacher.givenName
+          familyName = user.teacher.familyName
+        } else if (user.staff) {
+          givenName = user.staff.givenName
+          familyName = user.staff.familyName
+        }
 
         return {
           id: user.id + "",
-          // name: name!.givenName,
+          name: `${givenName} ${familyName}`,
           email: user.email,
           role: user.role,
         }

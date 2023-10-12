@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { BsFillArrowRightCircleFill } from "react-icons/bs";
-import { PiChalkboardTeacherFill, PiStudentFill } from "react-icons/pi";
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
+import { BsFillArrowRightCircleFill } from "react-icons/bs"
+import { PiChalkboardTeacherFill, PiStudentFill } from "react-icons/pi"
 import {
   HiHome,
   HiUser,
   HiDocumentText,
   HiOfficeBuilding,
-} from "react-icons/hi";
+} from "react-icons/hi"
 
 export function AdminNav({ lang }: { lang: string }) {
   const NavAdminItems = [
@@ -22,22 +22,22 @@ export function AdminNav({ lang }: { lang: string }) {
     },
     {
       title: "Student",
-      href: "/admin/student",
+      href: "#",
       icon: PiStudentFill,
     },
     {
       title: "Teacher",
-      href: "/admin/teacher",
+      href: "#",
       icon: PiChalkboardTeacherFill,
     },
     {
       title: "Course",
-      href: "/admin/course",
+      href: "#",
       icon: HiDocumentText,
     },
     {
       title: "Room",
-      href: "/admin/room",
+      href: "#",
       icon: HiOfficeBuilding,
     },
     {
@@ -45,16 +45,16 @@ export function AdminNav({ lang }: { lang: string }) {
       href: "/admin/staff",
       icon: HiUser,
     },
-  ];
-  const path = usePathname();
+  ]
+  const path = usePathname()
 
   if (!NavAdminItems?.length) {
-    return null;
+    return null
   }
   return (
     <div className="grid items-start gap-2 pl-4">
       {NavAdminItems.map((item, index) => {
-        const Icon = item.icon || BsFillArrowRightCircleFill;
+        const Icon = item.icon || BsFillArrowRightCircleFill
         return (
           item.href && (
             <Link key={index} href={item.disabled ? "/" : item.href}>
@@ -74,8 +74,8 @@ export function AdminNav({ lang }: { lang: string }) {
               </span>
             </Link>
           )
-        );
+        )
       })}
     </div>
-  );
+  )
 }

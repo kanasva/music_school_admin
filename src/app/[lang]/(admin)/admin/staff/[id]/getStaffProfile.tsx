@@ -1,9 +1,9 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"
 
 export async function getStaffProfile(id: string) {
-  const parsedId = parseInt(id, 10);
+  const parsedId = parseInt(id, 10)
   if (isNaN(parsedId)) {
-    throw new Error("Invalid ID format");
+    throw new Error("Invalid ID format")
   }
   const staffProfile = await prisma.staff.findUnique({
     where: {
@@ -46,6 +46,6 @@ export async function getStaffProfile(id: string) {
         },
       },
     },
-  });
-  return staffProfile;
+  })
+  return staffProfile
 }
