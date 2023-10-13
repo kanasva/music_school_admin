@@ -1,23 +1,28 @@
 /** @type {import('tailwindcss').Config} */
+
+// shadcn/ui
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-    './node_modules/flowbite-react/**/*.js',
-    './public/**/*.html'
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "./node_modules/flowbite-react/**/*.js",
+    "./public/**/*.html",
   ],
   theme: {
     container: {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        // "2xl": "1400px", // my overriding
       },
     },
     extend: {
+      screens: {
+        "2xl": "1440px", // my overriding
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -77,6 +82,6 @@ module.exports = {
   plugins: [
     require("tailwindcss-animate"),
     // require('flowbite/plugin'),
-    require('@tailwindcss/forms'),
+    require("@tailwindcss/forms"),
   ],
 }

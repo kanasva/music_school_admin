@@ -1,5 +1,7 @@
 export default function Admin() {
-	return (
-		<div><h1>Admin</h1></div>
-	)
+  return (
+    <div>
+      <h2>Home Page</h2>
+    </div>
+  )
 }
