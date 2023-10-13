@@ -41,7 +41,7 @@ export const addStaffSchema = z.object({
     .min(1, { message: "Nickname must be at least 1 character." })
     .max(30, { message: "Nickname must be no more than 30 characters." }),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-    message: "Invalid date format. Use YYYY-MM-DD",
+    message: "Invalid date format. Use DD/MM/YYYY",
   }),
   gender: z.union([
     z.enum(["MALE", "FEMALE", "OTHER"]),

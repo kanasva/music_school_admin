@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import * as z from "zod";
-import { addStaffSchema } from "@/app/[lang]/(admin)/admin/staff/add/addStaffSchema";
-import { hash } from "bcrypt";
+import { NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
+import * as z from "zod"
+import { addStaffSchema } from "@/app/[lang]/(admin)/admin/staff/add/addStaffSchema"
+import { hash } from "bcrypt"
 
 enum RoleType {
   STUDENT = "STUDENT",
@@ -17,46 +17,8 @@ enum GenderType {
   OTHER = "OTHER",
 }
 
-// interface PreparedData {
-//   email: string;
-//   password: string;
-//   role: RoleType.ADMIN;
-//   staff: {
-//     create: {
-//       givenName: string;
-//       middleName: string | null;
-//       familyName: string;
-//       nickName: string;
-//       dateOfBirth: Date;
-//       gender: GenderType;
-//       lineId: string | null;
-//     };
-//   };
-//   address: {
-//     create: {
-//       houseNo: string;
-//       building: string | null;
-//       floor: string | null;
-//       mooNo: string | null;
-//       soi: string | null;
-//       road: string | null;
-//       subDistrict: string;
-//       district: string;
-//       province: string;
-//       postalCode: string;
-//       country: string;
-//     };
-//   };
-//   phone: {
-//     create: {
-//       number: string;
-//       type: string;
-//     }[];
-//   };
-// }
-
 export async function POST(req: Request) {
-  const data: z.infer<typeof addStaffSchema> = await req.json();
+  const data: z.infer<typeof addStaffSchema> = await req.json()
 
   const preparedData = {
     email: data.email,
@@ -96,20 +58,20 @@ export async function POST(req: Request) {
         type: phone.type,
       })),
     },
-  };
+  }
 
   try {
     const createdStaff = await prisma.user.create({
       data: preparedData,
-    });
-    return NextResponse.json(createdStaff);
+    })
+    return NextResponse.json(createdStaff)
   } catch (error: unknown) {
     if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      return NextResponse.json({ error: error.message }, { status: 400 })
     }
     return NextResponse.json(
       { error: "An unexpected error occurred." },
       { status: 500 },
-    );
+    )
   }
 }

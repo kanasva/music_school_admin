@@ -1,10 +1,4 @@
 "use client"
-
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-} from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -17,7 +11,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import * as z from "zod"
 import {
   Select,
@@ -32,6 +26,7 @@ import { useRouter } from "next/navigation"
 import { addStaffSchema } from "../../add/addStaffSchema"
 import { getStaffProfile } from "../getStaffProfile"
 import { UnwrapPromise } from "@/types/UnwrapPromise"
+import { Fragment } from "react"
 
 interface EditStaffFormProps {
   params: { id: string }
@@ -40,12 +35,6 @@ interface EditStaffFormProps {
 
 export function EditStaffForm({ params, profile }: EditStaffFormProps) {
   const router = useRouter()
-  const primaryPhone = profile?.user.phone?.find(
-    (phone) => phone.priority === 1,
-  )?.number
-  const secondaryPhone = profile?.user.phone?.find(
-    (phone) => phone.priority === 2,
-  )?.number
 
   const defaultValues = {
     email: profile?.user.email || "",
@@ -58,12 +47,9 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
       ? profile.dateOfBirth.toISOString().slice(0, 10)
       : "",
     gender: profile?.gender || "",
-    primaryPhone: primaryPhone || "",
-    primaryPhoneType:
-      profile?.user.phone?.find((phone) => phone.priority === 1)?.type || "",
-    secondaryPhone: secondaryPhone || "",
-    secondaryPhoneType:
-      profile?.user.phone?.find((phone) => phone.priority === 2)?.type || "",
+    phone: profile?.user.phone
+      .sort((a, b) => a.priority - b.priority)
+      .map((p) => ({ number: p.number, type: p.type })),
     lineId: profile?.lineId || "",
     houseNo: profile?.user.address?.houseNo || "",
     building: profile?.user.address?.building || "",
@@ -89,19 +75,75 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
   })
 
   // 2. Define a submit handler.
+  // async function onSubmit(values: z.infer<typeof editStaffSchema>) {
+  //   // console.log(values)
+  //   const changedValues: Partial<z.infer<typeof editStaffSchema>> = {}
+  //   // typecast the objects to LooseObject type.
+  //   type LooseObject = {
+  //     [key: string]: any
+  //   }
+  //   const looseDefaultValues: LooseObject = defaultValues
+  //   // Iterate over the keys and values of the submitted form data.
+  //   for (const [key, value] of Object.entries(values)) {
+  //     // If the value is different from the default value, add it to the changedValues object.
+  //     if (value !== looseDefaultValues[key]) {
+  //       changedValues[key as keyof typeof defaultValues] = value
+  //     }
+  //   }
+  //   console.log(changedValues)
+  //   const res = await fetch(`/api/admin/staff/${params.id}/edit`, {
+  //     method: "PATCH",
+  //     body: JSON.stringify(changedValues),
+  //     headers: {
+  //       "Content-type": "application/json",
+  //     },
+  //   })
+  //   await res.json()
+  //   console.log(res)
+  //   if (res.ok) {
+  //     router.push(`/admin/staff/${params.id}`)
+  //   } else {
+  //     alert("Unsuccessful")
+  //   }
+  // }
+
   async function onSubmit(values: z.infer<typeof editStaffSchema>) {
-    console.log(values)
     const changedValues: Partial<z.infer<typeof editStaffSchema>> = {}
-    // typecast the objects to LooseObject type.
     type LooseObject = {
       [key: string]: any
     }
     const looseDefaultValues: LooseObject = defaultValues
-    // Iterate over the keys and values of the submitted form data.
+
+    const phoneHasChanged = (
+      newPhones: { number: string; type: string }[],
+      defaultPhones: { number: string; type: string }[],
+    ): boolean => {
+      if (newPhones.length !== defaultPhones.length) return true
+      for (let i = 0; i < newPhones.length; i++) {
+        const newPhone = newPhones[i]
+        const defaultPhone = defaultPhones[i]
+        if (
+          newPhone.number !== defaultPhone.number ||
+          newPhone.type !== defaultPhone.type
+        ) {
+          return true
+        }
+      }
+      return false
+    }
+
     for (const [key, value] of Object.entries(values)) {
-      // If the value is different from the default value, add it to the changedValues object.
-      if (value !== looseDefaultValues[key]) {
-        changedValues[key as keyof typeof defaultValues] = value
+      if (key === "phone") {
+        if (
+          phoneHasChanged(
+            value as { number: string; type: string }[],
+            looseDefaultValues[key] as { number: string; type: string }[],
+          )
+        ) {
+          changedValues[key as keyof typeof defaultValues] = value as any
+        }
+      } else if (value !== looseDefaultValues[key]) {
+        changedValues[key as keyof typeof defaultValues] = value as any
       }
     }
 
@@ -113,7 +155,7 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
       },
     })
     await res.json()
-    console.log(res)
+
     if (res.ok) {
       router.push(`/admin/staff/${params.id}`)
     } else {
@@ -145,41 +187,22 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
   const dob = form.watch("dateOfBirth")
   const age = dob ? calculateAge(dob) : "please put your date of birth"
 
-  const h4 =
-    "text-xl font-normal leading-none tracking-tight align-bottom pb-4 pt-6"
+  const { fields, append, remove } = useFieldArray({
+    name: "phone",
+    control: form.control,
+  })
 
   return (
-    <main className="w-full">
-      <Card className="m-2">
-        {/* Breadcrumb */}
-        <Breadcrumb className="px-4 pt-4">
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/admin/staff">Staff</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <BreadcrumbLink href={`/admin/staff/${params.id}`}>
-              {params.id}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem isCurrentPage>
-            <BreadcrumbLink>Edit Staff</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
-        <CardHeader className="pb-0">
-          <CardTitle className="align-bottom">Edit Staff</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-row justify-between gap-6"
-            >
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex flex-row gap-6">
+          <div className="flex w-full flex-col gap-6">
+            <Card className="w-full">
               {/* Sign-in Information */}
-              <div className="w-full">
-                <h4 className={h4}>Sign-in Information</h4>
+              <CardHeader>
+                <CardTitle>Sign-in Information</CardTitle>
+              </CardHeader>
+              <CardContent>
                 <FormField
                   control={form.control}
                   name="email"
@@ -203,7 +226,7 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
                         <Input
                           type="password"
                           placeholder="Your password"
-                          autoComplete="false"
+                          autoComplete="off"
                           {...field}
                         />
                       </FormControl>
@@ -211,9 +234,13 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
                     </FormItem>
                   )}
                 />
-
-                {/* Peronal Information */}
-                <h4 className={h4}>Peronal Information</h4>
+              </CardContent>
+            </Card>
+            <Card className="w-full">
+              <CardHeader>
+                <CardTitle>Personal Information</CardTitle>
+              </CardHeader>
+              <CardContent>
                 <FormField
                   control={form.control}
                   name="givenName"
@@ -258,7 +285,7 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
                   name="nickName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nick Name</FormLabel>
+                      <FormLabel>Nickname</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -279,7 +306,7 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
                     </FormItem>
                   )}
                 />
-                <p>Age: {age}</p>
+                <p className="text-sm">Age: {age}</p>
                 <FormField
                   control={form.control}
                   name="gender"
@@ -308,61 +335,63 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
                     </FormItem>
                   )}
                 />
-
-                {/* Contact */}
-                <h4 className={h4}>Contact</h4>
-                <FormField
-                  control={form.control}
-                  name="primaryPhone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Primary Phone</FormLabel>
-                      <FormControl>
-                        <Input type="number" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+              </CardContent>
+            </Card>
+            <Card className="w-full">
+              <CardHeader>
+                <CardTitle>Contact</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {/* start phone */}
+                {fields.map((field, index) => (
+                  <Fragment key={field.id}>
+                    <FormField
+                      control={form.control}
+                      name={`phone.${index}.number`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone {index + 1}</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`phone.${index}.type`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone {index + 1} Type</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </Fragment>
+                ))}
+                <div className="mb-2 flex items-center justify-between text-left">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => append({ number: "", type: "" })}
+                  >
+                    + Phone {fields.length + 1}
+                  </Button>
+                  {fields.length > 1 && (
+                    <Button
+                      variant="secondary"
+                      type="button"
+                      onClick={() => remove(fields.length - 1)}
+                    >
+                      Remove Phone {fields.length}
+                    </Button>
                   )}
-                />
-                <FormField
-                  control={form.control}
-                  name="primaryPhoneType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Primary Phone Type</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="secondaryPhone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Secondary Phone</FormLabel>
-                      <FormControl>
-                        <Input type="number" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="secondaryPhoneType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Secondary Phone Type</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                </div>
+                {/* end phone */}
                 <FormField
                   control={form.control}
                   name="lineId"
@@ -376,10 +405,15 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
                     </FormItem>
                   )}
                 />
-              </div>
-              {/* Address */}
-              <div className="w-full">
-                <h4 className={h4}>Address</h4>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="flex w-full flex-col gap-6">
+            <Card className="w-full">
+              <CardHeader>
+                <CardTitle>Address</CardTitle>
+              </CardHeader>
+              <CardContent>
                 <FormField
                   name="houseNo"
                   control={form.control}
@@ -523,16 +557,12 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
                     </FormItem>
                   )}
                 />
-                <div className="pt-6">
-                  <Button type="submit" className="w-full">
-                    Submit
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </main>
+              </CardContent>
+            </Card>
+            <Button type="submit">Submit</Button>
+          </div>
+        </div>
+      </form>
+    </Form>
   )
 }

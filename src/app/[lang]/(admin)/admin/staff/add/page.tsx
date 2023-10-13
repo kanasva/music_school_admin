@@ -108,11 +108,9 @@ export default function AddStaff() {
 
     return `${years} years, ${months} months, ${days} days`
   }
+
   const dob = form.watch("dateOfBirth")
   const age = dob ? calculateAge(dob) : "please put your date of birth"
-
-  const h4 =
-    "text-xl font-normal leading-none tracking-tight align-bottom pb-4 pt-6"
 
   return (
     <div>
@@ -243,7 +241,7 @@ export default function AddStaff() {
                       </FormItem>
                     )}
                   />
-                  <p>Age: {age}</p>
+                  <p className="text-sm">Age: {age}</p>
                   <FormField
                     control={form.control}
                     name="gender"
@@ -305,43 +303,31 @@ export default function AddStaff() {
                               <Input {...field} />
                             </FormControl>
                             <FormMessage />
-                            {index > 0 && (
-                              <div className="flex items-center justify-between pt-1">
-                                <Button
-                                  type="button"
-                                  variant="secondary"
-                                  onClick={() =>
-                                    append({ number: "", type: "" })
-                                  }
-                                >
-                                  + Phone {index + 2}
-                                </Button>
-                                <Button
-                                  variant="secondary"
-                                  type="button"
-                                  onClick={() => remove(index)}
-                                >
-                                  Remove Phone {index + 1}
-                                </Button>
-                              </div>
-                            )}
                           </FormItem>
                         )}
                       />
                     </Fragment>
                   ))}
-                  {fields.length === 1 && (
-                    <div className="mb-2 text-left">
+                  <div className="mb-2 flex items-center justify-between text-left">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => append({ number: "", type: "" })}
+                    >
+                      + Phone {fields.length + 1}
+                    </Button>
+                    {fields.length > 1 && (
                       <Button
-                        type="button"
                         variant="secondary"
-                        onClick={() => append({ number: "", type: "" })}
+                        type="button"
+                        onClick={() => remove(fields.length - 1)}
                       >
-                        + Phone 2
+                        Remove Phone {fields.length}
                       </Button>
-                    </div>
-                  )}
+                    )}
+                  </div>
                   {/* end phone */}
+
                   <FormField
                     control={form.control}
                     name="lineId"
