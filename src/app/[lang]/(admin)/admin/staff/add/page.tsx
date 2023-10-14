@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -31,6 +33,7 @@ import {
 import { addStaffSchema } from "./addStaffSchema"
 import { Fragment } from "react"
 import { useRouter } from "next/navigation"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 export default function AddStaff() {
   const router = useRouter()
@@ -63,6 +66,8 @@ export default function AddStaff() {
     },
   })
 
+  const { isSubmitting } = form.formState
+
   const { fields, append, remove } = useFieldArray({
     name: "phone",
     control: form.control,
@@ -70,7 +75,6 @@ export default function AddStaff() {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof addStaffSchema>) {
-    console.log(values)
     const res = await fetch("/api/admin/staff/add", {
       method: "POST",
       body: JSON.stringify(values),
@@ -79,7 +83,7 @@ export default function AddStaff() {
       },
     })
     await res.json()
-    console.log(res)
+
     if (res.ok) {
       router.push("/admin/staff")
     } else {
@@ -116,7 +120,7 @@ export default function AddStaff() {
     <div>
       <Breadcrumb className="pb-6">
         <BreadcrumbItem>
-          <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
+          <BreadcrumbLink href="#">Home</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink href="/admin/staff">Staff</BreadcrumbLink>
@@ -495,7 +499,15 @@ export default function AddStaff() {
                   />
                 </CardContent>
               </Card>
-              <Button type="submit">Submit</Button>
+
+              {isSubmitting ? (
+                <Button disabled>
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </Button>
+              ) : (
+                <Button type="submit">Submit</Button>
+              )}
             </div>
           </div>
         </form>

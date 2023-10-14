@@ -17,7 +17,7 @@ export default async function EditStaff({ params }: EditStaffProps) {
       {/* Breadcrumb */}
       <Breadcrumb className="pb-6">
         <BreadcrumbItem>
-          <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
+          <BreadcrumbLink href="#">Home</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink href="/admin/staff">Staff</BreadcrumbLink>

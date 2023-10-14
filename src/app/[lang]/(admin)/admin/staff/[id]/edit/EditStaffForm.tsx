@@ -1,4 +1,5 @@
 "use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -27,6 +28,7 @@ import { addStaffSchema } from "../../add/addStaffSchema"
 import { getStaffProfile } from "../getStaffProfile"
 import { UnwrapPromise } from "@/types/UnwrapPromise"
 import { Fragment } from "react"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 interface EditStaffFormProps {
   params: { id: string }
@@ -74,38 +76,7 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
     defaultValues: defaultValues,
   })
 
-  // 2. Define a submit handler.
-  // async function onSubmit(values: z.infer<typeof editStaffSchema>) {
-  //   // console.log(values)
-  //   const changedValues: Partial<z.infer<typeof editStaffSchema>> = {}
-  //   // typecast the objects to LooseObject type.
-  //   type LooseObject = {
-  //     [key: string]: any
-  //   }
-  //   const looseDefaultValues: LooseObject = defaultValues
-  //   // Iterate over the keys and values of the submitted form data.
-  //   for (const [key, value] of Object.entries(values)) {
-  //     // If the value is different from the default value, add it to the changedValues object.
-  //     if (value !== looseDefaultValues[key]) {
-  //       changedValues[key as keyof typeof defaultValues] = value
-  //     }
-  //   }
-  //   console.log(changedValues)
-  //   const res = await fetch(`/api/admin/staff/${params.id}/edit`, {
-  //     method: "PATCH",
-  //     body: JSON.stringify(changedValues),
-  //     headers: {
-  //       "Content-type": "application/json",
-  //     },
-  //   })
-  //   await res.json()
-  //   console.log(res)
-  //   if (res.ok) {
-  //     router.push(`/admin/staff/${params.id}`)
-  //   } else {
-  //     alert("Unsuccessful")
-  //   }
-  // }
+  const { isSubmitting } = form.formState
 
   async function onSubmit(values: z.infer<typeof editStaffSchema>) {
     const changedValues: Partial<z.infer<typeof editStaffSchema>> = {}
@@ -157,7 +128,8 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
     await res.json()
 
     if (res.ok) {
-      router.push(`/admin/staff/${params.id}`)
+      // router.push(`/admin/staff/${params.id}`)
+      window.location.href = `/admin/staff/${params.id}`
     } else {
       alert("Unsuccessful")
     }
@@ -559,7 +531,15 @@ export function EditStaffForm({ params, profile }: EditStaffFormProps) {
                 />
               </CardContent>
             </Card>
-            <Button type="submit">Submit</Button>
+
+            {isSubmitting ? (
+              <Button disabled className="w-full">
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button type="submit">Submit</Button>
+            )}
           </div>
         </div>
       </form>

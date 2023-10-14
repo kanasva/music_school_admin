@@ -5,10 +5,6 @@ import { prisma } from "@/lib/prisma"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { compare } from "bcrypt"
 
-interface User {
-  email: string
-}
-
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
@@ -38,8 +34,8 @@ export const authOptions: NextAuthOptions = {
             email: credentials.email,
           },
           select: {
-            id: true, // Assuming you want to return the user's id
-            email: true, // and email, adjust as needed
+            id: true,
+            email: true,
             password: true,
             role: true,
             student: {
@@ -102,17 +98,13 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         // name and email are already included by default
         token.id = user.id
-        // token.name = user.name
         token.role = user.role
       }
-      // console.log('jwt callback', { token, user })
       return token
     },
     session: ({ session, token }) => {
       session.user.id = token.id
-      // session.user.name = token.name;
       session.user.role = token.role
-      // console.log('session callback', { session, token })
       return session
     },
   },

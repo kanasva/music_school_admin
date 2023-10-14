@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 
 export async function DELETE(
   request: Request,
@@ -13,6 +14,8 @@ export async function DELETE(
     await prisma.user.delete({
       where: { id: staffRecord.userId },
     })
+    revalidatePath("/[lang]/(admin)/admin/staff", "page")
+
     return new Response(null, { status: 204 }) // 204 No Content
   }
   return new Response("Not found", { status: 404 }) // 404 Not Found

@@ -48,7 +48,6 @@ h4 {
 }
 
 /* shadcn-ui */
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -107,5 +106,4 @@ h4 {
       "calt" 1;
   }
 }
-
 /* end shadcn-ui */

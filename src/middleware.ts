@@ -3,11 +3,7 @@ import type { NextFetchEvent, NextRequest } from "next/server"
 import { match as matchLocale } from "@formatjs/intl-localematcher"
 import Negotiator from "negotiator"
 import { i18n } from "@/lib/i18n-config"
-import {
-  NextMiddlewareWithAuth,
-  NextRequestWithAuth,
-  withAuth,
-} from "next-auth/middleware"
+import { NextRequestWithAuth, withAuth } from "next-auth/middleware"
 
 function getLocale(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
@@ -17,7 +13,7 @@ function getLocale(request: NextRequest): string | undefined {
   const locales: string[] = i18n.locales
   // Use negotiator and intl-localematcher to get best locale
   let languages = new Negotiator({ headers: negotiatorHeaders }).languages(
-    locales
+    locales,
   )
   const locale = matchLocale(languages, locales, i18n.defaultLocale)
   return locale
@@ -27,7 +23,8 @@ function i18nMiddleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+    (locale) =>
+      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
   )
   // Redirect if there is no locale
   if (pathnameIsMissingLocale) {
@@ -37,8 +34,8 @@ function i18nMiddleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}${search}`,
-        request.url
-      )
+        request.url,
+      ),
     )
   }
 }
@@ -50,7 +47,7 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
   const locales = i18n.locales.join("|")
   // publicPath is /, /sign-in, /en, /th, /en/sign-in, /th/sign-in
   const publicPath = new RegExp(
-    `^(/|/sign-in|/(${locales})|/(${locales})/sign-in)$`
+    `^(/|/sign-in|/(${locales})|/(${locales})/sign-in)$`,
   )
 
   // allow internal path
@@ -83,7 +80,7 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
             return i18nMiddleware(req)
           } else {
             return NextResponse.redirect(
-              new URL(`/${getLocale(req)}/admin`, req.url)
+              new URL(`/${getLocale(req)}/admin/staff`, req.url),
             )
           }
         }
@@ -96,13 +93,13 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
             return i18nMiddleware(req)
           } else {
             return NextResponse.redirect(
-              new URL(`/${getLocale(req)}/student`, req.url)
+              new URL(`/${getLocale(req)}/student`, req.url),
             )
           }
         }
         return new NextResponse(
           JSON.stringify({ success: false, message: "authentication failed" }),
-          { status: 401, headers: { "content-type": "application/json" } }
+          { status: 401, headers: { "content-type": "application/json" } },
         )
       },
       {
@@ -114,62 +111,8 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
         pages: {
           signIn: getLocale(req) + "/sign-in",
         },
-      }
+      },
       // withAuth only need to take req, but here to conform withAuth type
     )(req as NextRequestWithAuth, event)
   }
-
-  // return new NextResponse(
-  //   JSON.stringify({ success: false, message: "authentication failed" }),
-  //   { status: 401, headers: { "content-type": "application/json" } }
-  // )
 }
-
-// export default withAuth(
-//   // `withAuth` augments your `Request` with the user's token.
-//   function middleware(req) {
-//     console.log(req.nextauth)
-//     const pathname = req.nextUrl.pathname
-//     console.log(pathname)
-//     const locales = i18n.locales.join("|")
-//     const regex = (value: string) => new RegExp(`^/(${locales})/${value}`)
-
-//     if (req.nextauth.token?.role === "ADMIN") {
-//       if (
-//         pathname.startsWith("/admin") ||
-//         regex("admin").test(pathname) ||
-//         pathname.startsWith("/api/admin")
-//       ) {
-//         return i18nMiddleware(req)
-//       } else {
-//         console.log(req.url)
-//         return NextResponse.redirect(
-//           new URL(`/${getLocale(req)}/admin`, req.url)
-//         )
-//       }
-//     }
-//     if (req.nextauth.token?.role === "STUDENT") {
-//       if (
-//         pathname.startsWith("/student") ||
-//         regex("student").test(pathname) ||
-//         pathname.startsWith("/api/student")
-//       ) {
-//         return i18nMiddleware(req)
-//       } else {
-//         return NextResponse.redirect(
-//           new URL(`/${getLocale(req)}/admin`, req.url)
-//         )
-//       }
-//     }
-
-//     return new NextResponse("You are not authorized!")
-//   },
-//   {
-//     callbacks: {
-//       authorized: ({ token }) => !!token,
-//     },
-//     pages: {
-//       signIn: "/sign-in",
-//     },
-//   }
-// )

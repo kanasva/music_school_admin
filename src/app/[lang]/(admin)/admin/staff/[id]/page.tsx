@@ -69,7 +69,7 @@ export default async function StaffProfile({ params }: StaffProfileProps) {
     <div>
       <Breadcrumb className="pb-6">
         <BreadcrumbItem>
-          <BreadcrumbLink href="/admin">Home</BreadcrumbLink>
+          <BreadcrumbLink href="#">Home</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink href="/admin/staff">Staff</BreadcrumbLink>

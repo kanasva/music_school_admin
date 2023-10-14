@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import * as z from "zod"
 import { addStaffSchema } from "@/app/[lang]/(admin)/admin/staff/add/addStaffSchema"
 import { hash } from "bcrypt"
+import { revalidatePath } from "next/cache"
 
 enum RoleType {
   STUDENT = "STUDENT",
@@ -64,6 +65,7 @@ export async function POST(req: Request) {
     const createdStaff = await prisma.user.create({
       data: preparedData,
     })
+    revalidatePath("/[lang]/(admin)/admin/staff", "page")
     return NextResponse.json(createdStaff)
   } catch (error: unknown) {
     if (error instanceof Error) {
