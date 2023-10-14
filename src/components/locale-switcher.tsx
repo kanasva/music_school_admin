@@ -4,7 +4,7 @@ import React, { forwardRef } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { i18n } from "@/lib/i18n-config"
-import cn from "classnames" // Assuming you're using 'classnames' package
+import { cn } from "@/lib/utils"
 
 const LocaleSwitcher = forwardRef<
   HTMLDivElement,
