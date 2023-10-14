@@ -1,4 +1,3 @@
-import { PublicNav } from "@/components/PublicNav"
 import "@/app/globals.css"
 import AuthProvider from "@/components/AuthProvider"
 import { i18n } from "@/lib/i18n-config"
@@ -20,11 +19,10 @@ export default function RootLayout({
   params: { lang: string }
 }) {
   return (
-    <html lang={params.lang}>
-      <body>
-        <PublicNav />
-        {children}
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang={params.lang}>
+        <body>{children}</body>
+      </html>
+    </AuthProvider>
   )
 }

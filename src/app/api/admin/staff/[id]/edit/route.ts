@@ -182,19 +182,17 @@ export async function PATCH(
     })
 
     // to purge cached data on-demand for a specific path
-    // revalidatePath("/[lang]/(admin)/admin/staff", "page")
-    // revalidatePath("/[lang]/(admin)/admin/staff/[id]", "page")
-    // revalidatePath("/[lang]/(admin)/admin/staff/[id]/edit", "page")
-    // const languages = i18n.locales
-    // const endpoints = [
-    //   `admin/staff/${params.id}`,
-    //   `admin/staff/${params.id}/edit`,
-    // ]
-    // languages.forEach((lang) => {
-    //   endpoints.forEach((endpoint) => {
-    //     revalidatePath(`/${lang}/${endpoint}`)
-    //   })
-    // })
+    revalidatePath("/[lang]/(admin)/admin/staff", "page")
+    const languages = i18n.locales
+    const endpoints = [
+      `admin/staff/${params.id}`,
+      `admin/staff/${params.id}/edit`,
+    ]
+    languages.forEach((lang) => {
+      endpoints.forEach((endpoint) => {
+        revalidatePath(`/${lang}/${endpoint}`)
+      })
+    })
 
     return NextResponse.json({
       ...updatedStaff,

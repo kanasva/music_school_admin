@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -27,7 +28,9 @@ const formSchema = z.object({
 
 export default function SignInForm() {
   const callbackUrlQuery = useSearchParams().get("callbackUrl")
-  const callbackUrl = callbackUrlQuery ? callbackUrlQuery : undefined
+  const callbackUrl = callbackUrlQuery ? callbackUrlQuery : "/admin/staff"
+  const errorUrlQuery = useSearchParams().get("error")
+  const validCredentials = errorUrlQuery === "CredentialsSignin" ? false : true
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,6 +40,8 @@ export default function SignInForm() {
       password: "",
     },
   })
+
+  const { isSubmitting } = form.formState
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -49,6 +54,9 @@ export default function SignInForm() {
 
   return (
     <Form {...form}>
+      <div className="pl-4 pt-2 font-medium text-red-500">
+        {validCredentials ? "" : "Invalid Email or Password"}
+      </div>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4">
         <FormField
           control={form.control}
@@ -81,9 +89,16 @@ export default function SignInForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Sign in
-        </Button>
+        {isSubmitting ? (
+          <Button disabled className="w-full">
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </Button>
+        ) : (
+          <Button type="submit" className="w-full">
+            Sign in
+          </Button>
+        )}
       </form>
     </Form>
   )

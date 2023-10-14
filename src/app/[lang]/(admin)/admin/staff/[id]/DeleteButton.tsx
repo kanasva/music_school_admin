@@ -12,6 +12,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { useState } from "react"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 export default function DeleteButton({
   id,
@@ -20,7 +22,10 @@ export default function DeleteButton({
   id: string
   name: string
 }) {
+  const [isLoading, setLoading] = useState(false)
+
   const handleDelete = async () => {
+    setLoading(true)
     const response = await fetch(`/api/admin/staff/${id}/delete`, {
       method: "DELETE",
       headers: {
@@ -37,7 +42,14 @@ export default function DeleteButton({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Delete</Button>
+        {isLoading ? (
+          <Button disabled>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Deleting
+          </Button>
+        ) : (
+          <Button variant="destructive">Delete</Button>
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -49,6 +61,7 @@ export default function DeleteButton({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
+
           <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

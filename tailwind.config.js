@@ -15,9 +15,7 @@ module.exports = {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        // "2xl": "1400px", // my overriding
-      },
+      screens: {},
     },
     extend: {
       screens: {
@@ -79,9 +77,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require("tailwindcss-animate"),
-    // require('flowbite/plugin'),
-    require("@tailwindcss/forms"),
-  ],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/forms")],
 }

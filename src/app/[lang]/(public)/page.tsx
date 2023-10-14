@@ -5,8 +5,7 @@ export default function Home({
 }: {
   params: { lang: Locale }
 }) {
-  // redicect to the admin page since we haven't the home page yet.
-  redirect("/admin")
-
+  // redicect to the admin/staff page since we haven't the home page yet.
+  redirect("/admin/staff")
   return <></>
 }

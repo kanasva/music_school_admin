@@ -10,15 +10,21 @@ import {
   HiUser,
   HiDocumentText,
   HiOfficeBuilding,
+  HiPencilAlt,
 } from "react-icons/hi"
 
 export function AdminNav({ lang }: { lang: string }) {
   const NavAdminItems = [
     {
       title: "Home",
-      href: "/admin",
+      href: "#",
       icon: HiHome,
       disabled: false,
+    },
+    {
+      title: "Enrolment",
+      href: "#",
+      icon: HiPencilAlt,
     },
     {
       title: "Student",
